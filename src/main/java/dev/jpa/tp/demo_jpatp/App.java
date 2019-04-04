@@ -4,8 +4,11 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
+
+
 
 /**
  * Hello world!
@@ -29,12 +32,31 @@ public class App
     			listeLivres.forEach(unLivre -> {
     				System.out.println(unLivre.getId() + " - "  + unLivre.getTitre() + " - " + unLivre.getAuteur());
     			});
+    			//after using find function
+    			try {Client client = em1.find(Client.class, 1);
+    			if (client != null){  
+    				
+    				System.out.println("the entry is"+ client.toString());
+    			} 
+    			}
+               catch (EntityNotFoundException e) 
+    			{ System.out.println("entity not found"+e);
+               }
     			
+    			//to get the borrowers
+                TypedQuery<Emprunt> requeteEmprunts = em1.createQuery("select e from Emprunt e where e.client_id=id", Emprunt.class);
+    			
+    			List<Emprunt> empruntLivres = requeteEmprunts.getResultList();
+    			
+    			empruntLivres.forEach(unemprunt -> {
+    				System.out.println(unemprunt.getClient_id().getNom().toUpperCase() + " - " + unemprunt.getClient_id().getPrenom() +"->"
+    			+ unemprunt.getDelai()+ " days of delai" );
+    			});
     			
     			// Fin d'une unité de travail
     			em1.close();
     			
     			emf.close();
-        System.out.println( "Hello World!" );
+      
     }
 }

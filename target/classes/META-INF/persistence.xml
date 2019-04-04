@@ -3,11 +3,14 @@
 	<persistence-unit name="demo-jpatp" transaction-type="RESOURCE_LOCAL">
 		<!-- Choix de l'implémentation JPA (ici Hibernate) -->
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-		<class>dev.Livre</class>
+		<class>dev.jpa.tp.demo_jpatp.Livre</class>
+		<class>dev.jpa.tp.demo_jpatp.Client</class>
+		<class>dev.jpa.tp.demo_jpatp.Emprunt</class>
+		
 		<properties>
 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/bdd_livre" />
 			<property name="javax.persistence.jdbc.user" value="root" />
-			<property name="javax.persistence.jdbc.password" value="root" />
+			<property name="javax.persistence.jdbc.password" value="" />
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
 		</properties>
 	</persistence-unit>

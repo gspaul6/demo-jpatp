@@ -1,15 +1,19 @@
 package dev.jpa.tp.demo_jpatp;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.*;
+//import javax.persistence.Column;
+//import javax.persistence.Entity;
+//import javax.persistence.GeneratedValue;
+//import javax.persistence.GenerationType;
+//import javax.persistence.Id;
+//import javax.persistence.Table;
 
 @Entity
 @Table(name="LIVRE")
 public class Livre {
-	@Id // obligatoire
+	@Id // Obligatory
 	@Column(name="ID")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
@@ -19,7 +23,22 @@ public class Livre {
 	
 	@Column(name="AUTEUR")
 	private String auteur;
-
+    
+	
+	@ManyToMany(mappedBy="book") 
+	private List<Emprunt> borrow;
+	
+	
+	public List<Emprunt> getBorrow() {
+		return borrow;
+	}
+	public void setBorrow(List<Emprunt> borrow) {
+		this.borrow = borrow;
+	}
+	public Livre(){
+		borrow=new ArrayList<Emprunt>();
+		
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -42,6 +61,10 @@ public class Livre {
 
 	public void setAuteur(String auteur) {
 		this.auteur = auteur;
+	}
+	@Override
+	public String toString() {
+		return "Livre [id=" + id + ", titre=" + titre + ", auteur=" + auteur + ", borrow=" + borrow + "]";
 	}
 	
 }
