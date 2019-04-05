@@ -10,6 +10,7 @@ import java.util.Scanner;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
@@ -20,24 +21,29 @@ public class App1 {
 	public static Scanner scan = new Scanner(System.in);
 	public static Compte compte = new Compte();
 	public static Operation operation = new Operation();
-	public static Client client1 = new Client();
+	public static Clientb client1 = new Clientb();
 	public static Banque bank1 = new Banque();
 	public static List<Banque> listbank = new ArrayList<Banque>();
 
 	public static void openaccount() {
 		System.out.println("Welcome to the Bank");
 		// Etape 1 - Créer une instance d'EntityManagerFactory
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("demo-jpatp");
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("banque");
 
 		// Début d'une unité de travail
 		EntityManager em1 = emf.createEntityManager();
+
+		EntityTransaction transaction = em1.getTransaction();
+		transaction.begin();
+
 		System.out.println("please entere your nom");
 		String name = scan.next();
 		try {
-			TypedQuery<Client> query = em1.createQuery("select c from Client c where c.nom=?", Client.class);
+			TypedQuery<Clientb> query = em1.createQuery("select c from Clientb c where c.nom=?1", Clientb.class);
 			query.setParameter(1, name);
-			client1 = query.getResultList().get(0);
-			if (client1 != null) {
+			List<Clientb> list = query.getResultList();// it sends the list
+
+			if (list.isEmpty()) {
 
 				System.out.println("please  fill in the details---");
 				System.out.println("Enter your nom");
@@ -57,16 +63,25 @@ public class App1 {
 				bank1.setNom("Bnpparibas");
 				em1.persist(bank1);
 				listbank.add(bank1);
+				System.out.println(bank1.getNom());
 
 				// second bank
-				bank1.setNom("Societe general");
-				em1.persist(bank1);
-				listbank.add(bank1);
+				Banque bank3 = new Banque();
+				bank3.setNom("Societe general");
+				em1.persist(bank3);
+				listbank.add(bank3);
+				System.out.println(bank3.getNom());
 
 				// Third Bank
-				bank1.setNom("CA");
-				em1.persist(bank1);
-				listbank.add(bank1);
+				Banque bank4 = new Banque();
+				bank4.setNom("CA");
+				em1.persist(bank4);
+				listbank.add(bank4);
+				System.out.println(bank4.getNom());
+
+				transaction.commit();
+				transaction = em1.getTransaction();
+				transaction.begin();
 
 				// for demanding the account
 				System.out.println("choose from these banks, give a number");
@@ -86,8 +101,9 @@ public class App1 {
 					// banque
 					TypedQuery<Banque> query11 = em1.createQuery("select b from Banque b where b.nom='Bnpparibas'",
 							Banque.class);
-					bank1 = query11.getResultList().get(0);
-					em1.persist(bank1);
+					Banque bank2 = query11.getResultList().get(0);
+					// bank1 = query11.getResultList().get(0);
+					em1.persist(bank2);
 					// operation
 					operation.setDate(LocalDate.now());
 					operation.setMontant(amount1);
@@ -96,7 +112,7 @@ public class App1 {
 					break;
 
 				case 2:
-					String numerobank2 = RandomStringUtils.random(5, "abcdefg");
+					String numerobank2 = RandomStringUtils.random(5, "123456");
 					compte.setNumero(numerobank2);
 					System.out.println("entre an amount for depositing");
 					double amount2 = scan.nextDouble();
@@ -114,7 +130,7 @@ public class App1 {
 					em1.persist(operation);
 					break;
 				case 3:
-					String numerobank3 = RandomStringUtils.random(5, "abcdefg");
+					String numerobank3 = RandomStringUtils.random(5, "1234567");
 					compte.setNumero(numerobank3);
 					System.out.println("entre an amount for depositing");
 					double amount3 = scan.nextDouble();
@@ -138,6 +154,7 @@ public class App1 {
 		} catch (EntityNotFoundException e) {
 			System.out.println("entity not found" + e);
 		}
+		transaction.commit();
 		em1.close();
 
 		emf.close();

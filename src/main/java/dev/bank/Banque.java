@@ -1,20 +1,27 @@
 package dev.bank;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
-@Table(name="BANQUE")
+@Table(name = "BANQUE")
 public class Banque {
-	
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY) 
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
-	@Column(name="NOM")
+
+	@Column(name = "NOM")
 	private String nom;
 
-	
 	public int getId() {
 		return id;
 	}
@@ -30,24 +37,25 @@ public class Banque {
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
-	@OneToMany(mappedBy="account")
-	private List<Client> bank; 
-	
-public Banque(){
-	bank=new ArrayList<Client>(); 
-}
 
-@Override
-public String toString() {
-	return "Banque [id=" + id + ", nom=" + nom + ", bank=" + bank + "]";
-}
+	@OneToMany(mappedBy = "account")
+	private List<Clientb> bank;
 
-public List<Client> getBank() {
-	return bank;
-}
+	public Banque() {
+		bank = new ArrayList<Clientb>();
+	}
 
-public void setBank(List<Client> bank) {
-	this.bank = bank;
-}
-	
+	@Override
+	public String toString() {
+		return "Banque [id=" + id + ", nom=" + nom + ", bank=" + bank + "]";
+	}
+
+	public List<Clientb> getBank() {
+		return bank;
+	}
+
+	public void setBank(List<Clientb> bank) {
+		this.bank = bank;
+	}
+
 }
