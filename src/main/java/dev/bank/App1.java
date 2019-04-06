@@ -1,20 +1,15 @@
 package dev.bank;
+import javax.persistence.*;
+
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
-
-import org.apache.commons.lang3.RandomStringUtils;
 
 public class App1 {
 
@@ -92,7 +87,7 @@ public class App1 {
 				switch (choice) {
 				case 1:
 					// account no.
-					String numerobank1 = RandomStringUtils.random(5, "abcdefg");
+					String numerobank1 = RandomStringUtils.random(5, "123456");
 					compte.setNumero(numerobank1);
 					System.out.println("entre an amount for depositing");
 					double amount1 = scan.nextDouble();
@@ -101,14 +96,33 @@ public class App1 {
 					// banque
 					TypedQuery<Banque> query11 = em1.createQuery("select b from Banque b where b.nom='Bnpparibas'",
 							Banque.class);
-					Banque bank2 = query11.getResultList().get(0);
+					List<Banque> bank2 = query11.getResultList();
 					// bank1 = query11.getResultList().get(0);
-					em1.persist(bank2);
+					Iterator tim=bank2.iterator();
+					while(tim.hasNext())
+					{
+						Banque tom=(Banque) tim.next();
+						
+							client1.setAccount(tom);
+							em1.persist(client1);	
+							
+					
+					}
+					TypedQuery<Clientb> query22 = em1.createQuery("select c from Clientb c where c.BANQUE_ID=:ref",
+							Clientb.class);
+					query22.setParameter("ref",bank2.get(0).getId());
+					
+					List<Clientb> clientb = query22.getResultList();
+					TypedQuery<Operation> query33 = em1.createQuery("select o from Operation o where o.IDCOMPTE=:ref",
+							Operation.class);
+					query33.setParameter("ref",bank2.get(0).getId());
 					// operation
 					operation.setDate(LocalDate.now());
 					operation.setMontant(amount1);
 					operation.setMotif("first transaction");
+					operation.setOpraccount(compte);
 					em1.persist(operation);
+					em1.persist(compte);
 					break;
 
 				case 2:

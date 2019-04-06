@@ -1,7 +1,5 @@
 package dev.bank;
-
-import javax.persistence.Embeddable;
-
+import javax.persistence.*;
 @Embeddable
 public class Adresse {
 

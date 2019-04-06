@@ -2,12 +2,6 @@ package dev.jpa.tp.demo_jpatp;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
-
 
 
 /**

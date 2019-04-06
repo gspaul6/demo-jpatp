@@ -1,16 +1,7 @@
 package dev.bank;
 
 import java.time.LocalDate;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
+import javax.persistence.*;
 @Entity
 @Table(name = "OPERATION")
 public class Operation {
@@ -65,16 +56,16 @@ public class Operation {
 		this.motif = motif;
 	}
 
-	public Banque getOpraccount() {
+	public Compte getOpraccount() {
 		return opraccount;
 	}
 
-	public void setOpraccount(Banque opraccount) {
+	public void setOpraccount(Compte opraccount) {
 		this.opraccount = opraccount;
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "COMPTE_ID")
-	private Banque opraccount;
+	@JoinColumn(name = "ID_COMPTE")
+	private Compte opraccount;
 
 }
