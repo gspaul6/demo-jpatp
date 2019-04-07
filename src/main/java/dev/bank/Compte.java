@@ -17,8 +17,16 @@ public class Compte {
 	private double solde;
 
 	@ManyToMany
-	@JoinTable(name = "compot", joinColumns = @JoinColumn(name = "ID_COMPTE", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ID_CLIENT", referencedColumnName = "ID"))
+	@JoinTable(name = "compot", joinColumns = @JoinColumn(name = "ID_COMPTE", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "ID_CLIENT", referencedColumnName = "id"))
 	private List<Clientb> clientaccount;
+
+	public List<Clientb> getClientaccount() {
+		return clientaccount;
+	}
+
+	public void setClientaccount(List<Clientb> clientaccount) {
+		this.clientaccount = clientaccount;
+	}
 
 	@OneToMany(mappedBy = "opraccount")
 	private List<Operation> operation;

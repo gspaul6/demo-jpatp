@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="TYPE")
 @Table(name = "CLIENTB")
 public class Clientb {
 
@@ -25,6 +27,14 @@ public class Clientb {
 
 	@ManyToMany(mappedBy = "clientaccount")
 	private List<Compte> borrowaccount;
+
+	public List<Compte> getBorrowaccount() {
+		return borrowaccount;
+	}
+
+	public void setBorrowaccount(List<Compte> borrowaccount) {
+		this.borrowaccount = borrowaccount;
+	}
 
 	@ManyToOne
 	@JoinColumn(name = "BANQUE_ID")

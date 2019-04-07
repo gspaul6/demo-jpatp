@@ -15,6 +15,14 @@ public class Adresse {
 		this.numero = numero;
 	}
 
+	public Adresse(){
+		
+	}
+	public Adresse(Integer numero, String rue,String ville){
+		this.numero=numero;
+		this.rue=rue;
+		this.ville=ville;
+	}
 	@Override
 	public String toString() {
 		return "Adresse [numero=" + numero + ", rue=" + rue + ", ville=" + ville + "]";

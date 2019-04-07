@@ -3,6 +3,8 @@ package dev.bank;
 import java.time.LocalDate;
 import javax.persistence.*;
 @Entity
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="Type")
 @Table(name = "OPERATION")
 public class Operation {
 	@Id

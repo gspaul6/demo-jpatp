@@ -8,7 +8,7 @@
 		<class>dev.jpa.tp.demo_jpatp.Livre</class>
 		<class>dev.jpa.tp.demo_jpatp.Client</class>
 		<class>dev.jpa.tp.demo_jpatp.Emprunt</class>
-		
+
 
 
 		<properties>
@@ -38,7 +38,7 @@
 			<property name="hibernate.hbm2ddl.auto" value="update" />
 			<!-- Drop and create à chaque redémarrage -->
 			<property name="javax.persistence.schema-generation.database.action"
-				value="drop-and-create" />
+				value="drop-and-create" />  
 
 			<!-- Affichage des requêtes SQL -->
 			<property name="hibernate.show_sql" value="true" />
