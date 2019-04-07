@@ -45,14 +45,14 @@ public class App1 {
 	public static void enterBanquetable() {
 		
 		// first bank name
-		bank1.setNom("Bnpparibas");
+		bank1.setNom("BNP");
 		em1.persist(bank1);
 		listbank.add(bank1);
 		System.out.println(bank1.getNom());
 
 		// second bank
 		Banque bank3 = new Banque();
-		bank3.setNom("Societe general");
+		bank3.setNom("SOCIETE");
 		em1.persist(bank3);
 		listbank.add(bank3);
 		System.out.println(bank3.getNom());
@@ -82,8 +82,8 @@ public class App1 {
 			List<Clientb> list = query.getResultList();// it sends the list
 
 			if (list.isEmpty()) {
-
-				System.out.println("please  fill in the details---");
+				
+				System.out.println("please  fill in the details for the first client");
 				System.out.println("Enter your nom");
 				String nom = scan.next();
 				client1.setNom(nom);
@@ -129,7 +129,7 @@ public class App1 {
 					em1.persist(compte);
 
 					// banque
-					TypedQuery<Banque> query11 = em1.createQuery("select b from Banque b where b.nom='Bnpparibas'",
+					TypedQuery<Banque> query11 = em1.createQuery("select b from Banque b where b.nom='BNP'",
 							Banque.class);
 					List<Banque> bank2 = query11.getResultList();
 					// bank1 = query11.getResultList().get(0);
@@ -172,7 +172,7 @@ public class App1 {
 					em1.persist(compte);
 
 					// banque
-					TypedQuery<Banque> query12 = em1.createQuery("select b from Banque b where b.nom='Societe general'",
+					TypedQuery<Banque> query12 = em1.createQuery("select b from Banque b where b.nom='SOCIETE'",
 							Banque.class);
 					List<Banque> bankSociete = query12.getResultList();
 
@@ -185,9 +185,9 @@ public class App1 {
 						em1.merge(client1);
 
 					}
-					TypedQuery<Clientb> query44 = em1.createQuery("select c from Clientb c where c.BANQUE_ID=:ref",
+					TypedQuery<Clientb> query44 = em1.createQuery("select c from Clientb c where c.account=:ref",
 							Clientb.class);
-					query44.setParameter("ref", client1.getAccount().getId());
+					query44.setParameter("ref", client1.getAccount());
 					List<Clientb> clientb1 = query44.getResultList();
 					compte.setClientaccount(clientb1);
 					TypedQuery<Compte> query55 = em1.createQuery("select co from Compte co where co.id=:ref ",
@@ -226,9 +226,9 @@ public class App1 {
 						em1.merge(client1);
 
 					}
-					TypedQuery<Clientb> query66 = em1.createQuery("select c from Clientb c where c.BANQUE_ID=:ref",
+					TypedQuery<Clientb> query66 = em1.createQuery("select c from Clientb c where c.account=:ref",
 							Clientb.class);
-					query66.setParameter("ref", client1.getAccount().getId());
+					query66.setParameter("ref", client1.getAccount());
 					List<Clientb> clientb2 = query66.getResultList();
 					compte.setClientaccount(clientb2);
 					TypedQuery<Compte> query77 = em1.createQuery("select co from Compte co where co.id=:ref ",
@@ -256,6 +256,51 @@ public class App1 {
 //		transaction.commit();
 //		closeConnection();
 	}
+	
+	public static void existingAccount(){
+		System.out.println("would you like to open a joint account ");
+		System.out.println("1. yes");
+		System.out.println("2. no");
+		String single=scan.next();
+		int singleAccount= Integer.parseInt(single);
+		switch(singleAccount){
+		case 1:
+			Clientb client2=new Clientb();
+			System.out.println("please  fill in the details for the first client");
+			System.out.println("Enter your nom");
+			String nom = scan.next();
+			client2.setNom(nom);
+			System.out.println("Enter your prenom");
+			String prenom = scan.next();
+			client2.setPrenom(prenom);
+			System.out.println("Enter your dateofbirth in the manner with the slash operator dd/mm/yyyy");
+			String dob = scan.next();
+			// 20/03/2019
+			LocalDate localDate = LocalDate.parse(dob, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+			client1.setDateNaissance(localDate);
+
+			// giving the address
+			Adresse addr2;
+			System.out.println("Enter your numero your road");
+			Integer numero = scan.nextInt();
+			System.out.println("enter the street address");
+			String street = scan.next();
+			System.out.println("enter the ville with code postal");
+			String vil = scan.next();
+			addr2 = new Adresse(numero, street, vil);
+			client2.setAdresse(addr2);
+			em1.persist(client2);
+			System.out.println("please provide the account number and the bank");
+			String accounNumber=scan.next();
+			int parseAccount=Integer.parseInt(accounNumber);
+			String namebanque=scan.next().toUpperCase();
+			
+			break;
+		case 2:
+			break;
+		}
+	}
+
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		try {
