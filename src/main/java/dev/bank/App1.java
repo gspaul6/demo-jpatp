@@ -1,9 +1,5 @@
 package dev.bank;
 
-import javax.persistence.*;
-
-import org.apache.commons.lang3.RandomStringUtils;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -11,6 +7,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
+
+import org.apache.commons.lang3.RandomStringUtils;
 
 public class App1 {
 
@@ -43,7 +48,7 @@ public class App1 {
 	}
 
 	public static void enterBanquetable() {
-		
+
 		// first bank name
 		bank1.setNom("BNP");
 		em1.persist(bank1);
@@ -63,16 +68,16 @@ public class App1 {
 		em1.persist(bank4);
 		listbank.add(bank4);
 		System.out.println(bank4.getNom());
-		//transaction.commit();
-		//closeConnection();
+		// transaction.commit();
+		// closeConnection();
 	}
 
 	public static void openaccount() {
 		System.out.println("Welcome to the Bank");
 		// calling the method to open connection
-		//openConnection();
+		// openConnection();
 		// calling the method to close connection
-		//beginTransaction();
+		// beginTransaction();
 
 		System.out.println("please entere your nom");
 		String name = scan.next();
@@ -82,7 +87,7 @@ public class App1 {
 			List<Clientb> list = query.getResultList();// it sends the list
 
 			if (list.isEmpty()) {
-				
+
 				System.out.println("please  fill in the details for the first client");
 				System.out.println("Enter your nom");
 				String nom = scan.next();
@@ -253,19 +258,19 @@ public class App1 {
 		} catch (EntityNotFoundException e) {
 			System.out.println("entity not found" + e);
 		}
-//		transaction.commit();
-//		closeConnection();
+		// transaction.commit();
+		// closeConnection();
 	}
-	
-	public static void existingAccount(){
+
+	public static void existingAccount() {
 		System.out.println("would you like to open a joint account ");
 		System.out.println("1. yes");
 		System.out.println("2. no");
-		String single=scan.next();
-		int singleAccount= Integer.parseInt(single);
-		switch(singleAccount){
+		String single = scan.next();
+		int singleAccount = Integer.parseInt(single);
+		switch (singleAccount) {
 		case 1:
-			Clientb client2=new Clientb();
+			Clientb client2 = new Clientb();
 			System.out.println("please  fill in the details for the first client");
 			System.out.println("Enter your nom");
 			String nom = scan.next();
@@ -290,17 +295,48 @@ public class App1 {
 			addr2 = new Adresse(numero, street, vil);
 			client2.setAdresse(addr2);
 			em1.persist(client2);
-			System.out.println("please provide the account number and the bank");
-			String accounNumber=scan.next();
-			int parseAccount=Integer.parseInt(accounNumber);
-			String namebanque=scan.next().toUpperCase();
-			
+			System.out.println("please provide the client name ");
+			String accountName = scan.next().toUpperCase();
+
+			TypedQuery<Clientb> query11 = em1.createQuery("select c from Clientb c where c.nom=:ref", Clientb.class);
+			query11.setParameter("ref", accountName);
+			List<Clientb> clientForBankName = query11.getResultList();
+
+			Iterator iterClientb = clientForBankName.iterator();
+			while (iterClientb.hasNext()) {
+				Banque tom = (Banque) iterClientb.next();
+
+				client2.setAccount(tom);
+				em1.merge(client2);
+
+			}
+
+			TypedQuery<Clientb> query66 = em1.createQuery("select c from Clientb c where c.account=:ref",
+					Clientb.class);
+			query66.setParameter("ref", client2.getAccount());
+			List<Clientb> clientb2 = query66.getResultList();
+			compte.setClientaccount(clientb2);
+
+			TypedQuery<Compte> query77 = em1.createQuery("select co from Compte co where co.id=:ref ", Compte.class);
+			query77.setParameter("ref", compte.getId());
+			List<Compte> compte31 = query77.getResultList();
+			client2.setBorrowaccount(compte31);
+
+			// operation
+			TypedQuery<Operation> query88 = em1.createQuery("select o from Operation o where o.ID_COMPTE=:ref",
+					Operation.class);
+			query66.setParameter("ref", client2.getAccount());
+			List<Operation> compte1 = query88.getResultList();
+			operation.setOpraccount(compte);
+			em1.merge(operation);
+			em1.merge(compte);
+			em1.merge(client2);
+
 			break;
 		case 2:
 			break;
 		}
 	}
-
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		try {
